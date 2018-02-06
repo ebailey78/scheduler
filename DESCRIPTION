@@ -1,0 +1,16 @@
+Package: scheduler
+Title: R Script Automation and Scheduling Tool
+Version: 0.0.0.9000
+Authors@R: person("Eric", "Bailey", email = "eb11307@gmail.com", role = c("aut", "cre"))
+Description: Allows the user to create special comments similar Roxygen2 or 
+  plumber that control when a script is automatically run. Also contains a built-in
+  logging functionality that allows you to track if scripts are running correctly.
+Depends: R (>= 3.4.3)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
