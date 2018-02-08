@@ -20,34 +20,29 @@ read_script <- function(fn) {
   }
 
   comments <- full_file[grepl("^\\#\\*", full_file)]
-  comments <- gsub("^\\#\\*[[:space:]]*", "", comments)
-  comments <- trimws(comments)
-  script <- full_file[!grepl("^\\#\\*", full_file)]
-  sched_script <- list()
+  script_name <- gsub("^\\#\\*\\s*", "", comments[!grepl("^\\#\\*\\s*$", comments)][[1]])
+  whens <- stringi::stri_match(full_file, regex = "^#[\\*\\*]\\s*@when\\s+(.*)$?")[, 2]
+  whens <- whens[!is.na(whens)]
+  if(length(whens) == 0) {
+    stop("No `@when` statements found in script.", call. = FALSE)
+  }
 
-  sched_script$script <- script
+  whens <- process_whens(whens)
 
-  if(comments[2] == "" && comments[1] != "") {
-    sched_script$name <- comments[1]
+  log_level <- stringi::stri_match(full_file, regex = "^#[\\*\\*]\\s*@log\\s+(.*)$?")[, 2]
+  log_level <- log_level[!is.na(log_level)]
+  if(is.na(log_level)) {
+    log_level <- "info"
   } else {
-    stop("Must have a name in the comments")
+    log_level <- log_level[1]
   }
 
-  end_desc <- which(comments == "")[which(comments == "") > 2][1] - 1
-  sched_script$description <- paste(comments[3:end_desc], collapse = " ")
-
-  tags <- comments[grepl("^@", comments)]
-  tags <- gsub("^@", "", tags)
-  tags <- strsplit(tags, " ")
-  for(i in seq_along(tags)) {
-    tag <- tags[[i]][1]
-    args <- tags[[i]][seq(2, length(tags[[i]]))]
-    if(tag %in% names(sched_script)) {
-
-    } else {
-      sched_script[tag] <- args
-    }
-  }
+  sched_script <- list(
+    script = full_file[!grepl("^\\#\\*", full_file)],
+    name = script_name,
+    whens = whens,
+    log_level = log_level
+  )
 
   class(sched_script) <- c("sched_script", class(sched_script))
 

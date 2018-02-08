@@ -1,6 +1,6 @@
 #* Test Job
 #*
-#*This is a test job. It is meant to test how the the comment reader works and
+#*This is a test job. It is meant to test how the comment reader works and
 #*eventually how well the script runner works.
 #*
 #* @when wednesday 04:30
@@ -8,7 +8,7 @@
 #* @when 035
 #* @when 21
 #* @when 10-09
-#* @when 02-08-2018
+#* @when 2018-02-08
 #*
 #* @log info
 
